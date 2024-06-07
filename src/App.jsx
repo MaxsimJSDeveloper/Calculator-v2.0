@@ -19,6 +19,7 @@ function App() {
     setOperation(e.target.value);
     if (isCalc) {
       setSecond("");
+      setIsClick(false);
     }
   };
 
@@ -51,7 +52,6 @@ function App() {
     if (operation === "" || (secondNum !== "" && operation !== "" && isClick)) {
       setFirst(-firstNum);
     }
-
     if (operation === "+" && secondNum === "") {
       setOperation("-");
     }
@@ -60,6 +60,22 @@ function App() {
     }
     if (operation !== "" && !isClick) {
       setSecond(-secondNum);
+    }
+  };
+
+  const inputDot = () => {
+    if (operation === "") {
+      if (!firstNum) {
+        setFirst("0.");
+      } else if (!firstNum.toString().includes(".")) {
+        setFirst(firstNum + ".");
+      }
+    } else {
+      if (!secondNum || secondNum === "-") {
+        setSecond("0.");
+      } else if (!secondNum.toString().includes(".")) {
+        setSecond(secondNum + ".");
+      }
     }
   };
 
@@ -83,8 +99,8 @@ function App() {
       <div className="result">
         <p className={"output"} style={{ fontSize: calcLength() }}>
           <span>{firstNum === "" ? "0" : firstNum}</span>
-          <span className={isClick ? "hidde" : ""}>{operation}</span>
-          <span className={isClick ? "hidde" : ""}>{secondNum}</span>
+          <span className={isClick ? "hidden" : ""}>{operation}</span>
+          <span className={isClick ? "hidden" : ""}>{secondNum}</span>
         </p>
       </div>
       <div className="buttons">
@@ -217,14 +233,7 @@ function App() {
         >
           0
         </button>
-        <button
-          onClick={(e) => {
-            inputFirstNum(e);
-            inputSecondNum(e);
-          }}
-          className="btn dot"
-          value="."
-        >
+        <button onClick={inputDot} className="btn dot" value=".">
           .
         </button>
         <button onClick={getSum} className="btn bg-orange">
