@@ -5,7 +5,6 @@ function App() {
   const [firstNum, setFirst] = useState("");
   const [operation, setOperation] = useState("");
   const [secondNum, setSecond] = useState("");
-  const [result, setResult] = useState("");
 
   const inputFirstNum = (e) => {
     if (firstNum && operation) return;
@@ -32,43 +31,52 @@ function App() {
       result = Number(firstNum) * Number(secondNum);
     } else if (operation === "/") {
       if (secondNum === 0) {
-        setResult("Error: Division by zero");
-        return;
+        return "Error: Division by zero";
       }
       result = Number(firstNum) / Number(secondNum);
     } else {
       result = "";
     }
-
-    // Добавляем результат к первому числу и обновляем состояние
     setFirst(result.toString());
     setOperation("");
     setSecond("");
-    setResult("");
+  };
+
+  const changeSign = () => {
+    if (firstNum > 0 && operation === "") {
+      setFirst(-firstNum);
+    }
+    if (firstNum < 0 && operation === "") {
+      setFirst(-firstNum);
+    }
+    if (operation === "+") {
+      setOperation("-");
+    }
+    if (operation === "-") {
+      setOperation("+");
+    }
   };
 
   const reset = () => {
     setOperation("");
     setFirst("");
     setSecond("");
-    setResult("");
   };
 
   return (
     <div className="container">
       <div className="result">
         <p className="output">
-          {firstNum}
+          {firstNum === "" ? "0" : firstNum}
           {operation}
           {secondNum}
         </p>
-        <p> {result}</p>
       </div>
       <div className="buttons">
         <button onClick={reset} className="btn bg-grey">
           ac
         </button>
-        <button className="btn bg-grey" value="+/-">
+        <button onClick={changeSign} className="btn bg-grey" value="+/-">
           +/-
         </button>
         <button className="btn bg-grey" value="%">
@@ -194,7 +202,14 @@ function App() {
         >
           0
         </button>
-        <button className="btn dot" value=".">
+        <button
+          onClick={(e) => {
+            inputFirstNum(e);
+            inputSecondNum(e);
+          }}
+          className="btn dot"
+          value="."
+        >
           .
         </button>
         <button onClick={getSum} className="btn bg-orange">
