@@ -71,6 +71,10 @@
   color: #ff9501;
 }
 
-.lol {
+.min {
   font-size: 48px;
+}
+
+.hidden {
+  display: none;
 }

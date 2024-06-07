@@ -5,6 +5,8 @@ function App() {
   const [firstNum, setFirst] = useState("");
   const [operation, setOperation] = useState("");
   const [secondNum, setSecond] = useState("");
+  const [isClick, setIsClick] = useState(false);
+  const [isCalc, setIsCalc] = useState(false);
 
   const inputFirstNum = (e) => {
     if (firstNum && operation) return;
@@ -12,8 +14,12 @@ function App() {
   };
 
   const inputOperation = (e) => {
+    setIsCalc(true);
     if (!firstNum) return;
     setOperation(e.target.value);
+    if (isCalc) {
+      setSecond("");
+    }
   };
 
   const inputSecondNum = (e) => {
@@ -22,6 +28,7 @@ function App() {
   };
 
   const getSum = () => {
+    setIsClick(true);
     let result;
     if (operation === "+") {
       result = Number(firstNum) + Number(secondNum);
@@ -37,23 +44,22 @@ function App() {
     } else {
       result = "";
     }
-    setFirst(result.toString());
-    setOperation("");
-    setSecond("");
+    setFirst(result);
   };
 
   const changeSign = () => {
-    if (firstNum > 0 && operation === "") {
+    if (operation === "" || (secondNum !== "" && operation !== "" && isClick)) {
       setFirst(-firstNum);
     }
-    if (firstNum < 0 && operation === "") {
-      setFirst(-firstNum);
-    }
-    if (operation === "+") {
+
+    if (operation === "+" && secondNum === "") {
       setOperation("-");
     }
-    if (operation === "-") {
+    if (operation === "-" && secondNum === "") {
       setOperation("+");
+    }
+    if (operation !== "" && !isClick) {
+      setSecond(-secondNum);
     }
   };
 
@@ -61,15 +67,24 @@ function App() {
     setOperation("");
     setFirst("");
     setSecond("");
+    setIsClick(false);
+    setIsCalc(false);
+  };
+
+  const calcLength = () => {
+    const length = `${firstNum}${operation}${secondNum}`.length;
+    if (length > 16) return "1.5em";
+    if (length > 10) return "2em";
+    if (length > 8) return "3em";
   };
 
   return (
     <div className="container">
       <div className="result">
-        <p className="output">
-          {firstNum === "" ? "0" : firstNum}
-          {operation}
-          {secondNum}
+        <p className={"output"} style={{ fontSize: calcLength() }}>
+          <span>{firstNum === "" ? "0" : firstNum}</span>
+          <span className={isClick ? "hidde" : ""}>{operation}</span>
+          <span className={isClick ? "hidde" : ""}>{secondNum}</span>
         </p>
       </div>
       <div className="buttons">
@@ -120,7 +135,7 @@ function App() {
         >
           9
         </button>
-        <button onClick={inputOperation} className="btn" value="x">
+        <button onClick={inputOperation} className="btn bg-orange" value="x">
           x
         </button>
 
@@ -154,7 +169,7 @@ function App() {
         >
           6
         </button>
-        <button onClick={inputOperation} className="btn" value="-">
+        <button onClick={inputOperation} className="btn bg-orange" value="-">
           -
         </button>
 
@@ -188,7 +203,7 @@ function App() {
         >
           3
         </button>
-        <button onClick={inputOperation} className="btn" value="+">
+        <button onClick={inputOperation} className="btn bg-orange" value="+">
           +
         </button>
 
