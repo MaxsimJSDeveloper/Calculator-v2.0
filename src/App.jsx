@@ -16,6 +16,9 @@ function App() {
   const inputOperation = (e) => {
     setIsCalc(true);
     if (!firstNum) return;
+    if (!isClick && isCalc && secondNum) {
+      getSum();
+    }
     setOperation(e.target.value);
     if (isCalc) {
       setSecond("");
@@ -63,18 +66,21 @@ function App() {
     }
   };
 
-  const inputDot = () => {
-    if (operation === "") {
-      if (!firstNum) {
-        setFirst("0.");
-      } else if (!firstNum.toString().includes(".")) {
-        setFirst(firstNum + ".");
+  const inputDot = (e) => {
+    const dot = e.target.value;
+    if (!isClick) {
+      if (operation === "" && !firstNum.toString().includes(".")) {
+        setFirst(firstNum + dot);
+      } else if (operation !== "" && !secondNum.toString().includes(".")) {
+        setSecond(secondNum + dot);
       }
     } else {
-      if (!secondNum || secondNum === "-") {
-        setSecond("0.");
-      } else if (!secondNum.toString().includes(".")) {
-        setSecond(secondNum + ".");
+      if (operation === "") {
+        setFirst("0" + dot);
+        setIsClick(false);
+      } else {
+        setSecond("0" + dot);
+        setIsClick(false);
       }
     }
   };
@@ -95,7 +101,7 @@ function App() {
   };
 
   return (
-    <div className="container">
+    <div className="container" translate="no">
       <div className="result">
         <p className={"output"} style={{ fontSize: calcLength() }}>
           <span>{firstNum === "" ? "0" : firstNum}</span>
@@ -233,7 +239,13 @@ function App() {
         >
           0
         </button>
-        <button onClick={inputDot} className="btn dot" value=".">
+        <button
+          onClick={(e) => {
+            inputDot(e);
+          }}
+          className="btn dot"
+          value="."
+        >
           .
         </button>
         <button onClick={getSum} className="btn bg-orange">

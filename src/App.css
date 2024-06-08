@@ -43,6 +43,7 @@
   font-size: 24px;
   cursor: pointer;
   user-select: none;
+  color: #d6d6d6;
 }
 
 .btn.zero {
@@ -60,10 +61,12 @@
 
 .btn.bg-grey {
   background-color: #a6a6a6;
+  color: #000000;
 }
 
 .btn.bg-orange {
   background-color: #ff9501;
+  color: #000000;
 }
 
 .message {
